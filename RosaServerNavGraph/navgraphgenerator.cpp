@@ -20,10 +20,18 @@ static const std::tuple<float, float> isTouchingGroundCheckpoints[] = {
     {-0.251f, 0.251f},
     {-0.251f, -0.251f}};
 
+static constexpr const float sightSpan = 0.2f;
+
 static const std::tuple<float, float, float> lineOfSightCheckpoints[] = {
-    {0.f, 0.f, 0.f},         {0.01f, 0.01f, 0.01f},   {0.01f, 0.01f, -0.01f},
-    {-0.01f, 0.01f, 0.01f},  {-0.01f, 0.01f, -0.01f}, {0.01f, -0.01f, 0.01f},
-    {0.01f, -0.01f, -0.01f}, {-0.01f, -0.01f, 0.01f}, {-0.01f, -0.01f, -0.01f},
+    {0.f, 0.f, 0.f},
+    {sightSpan, sightSpan, sightSpan},
+    {sightSpan, sightSpan, -sightSpan},
+    {-sightSpan, sightSpan, sightSpan},
+    {-sightSpan, sightSpan, -sightSpan},
+    {sightSpan, -sightSpan, sightSpan},
+    {sightSpan, -sightSpan, -sightSpan},
+    {-sightSpan, -sightSpan, sightSpan},
+    {-sightSpan, -sightSpan, -sightSpan},
 };
 
 static inline bool doVoxelsHaveLineOfSight(Vector& posA, Vector posB) {
