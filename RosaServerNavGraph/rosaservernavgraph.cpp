@@ -1,7 +1,22 @@
+#include "navgraphgenerator.h"
 #include "sol/sol.hpp"
 
 static sol::table openLibrary(sol::this_state L) {
 	sol::state_view lua(L);
+
+	{
+		uintptr_t baseAddress = lua["memory"]["getBaseAddress"]();
+		lineIntersectLevel = (lineIntersectLevelFunc)(baseAddress + 0x88cf0);
+	}
+
+	{
+		auto meta = lua.new_usertype<NavGraphGenerator>("NavGraphGenerator");
+		meta["generate"] = &NavGraphGenerator::generate;
+		meta["addStreetCuboid"] = &NavGraphGenerator::addStreetCuboid;
+		meta["markStreetNodes"] = &NavGraphGenerator::markStreetNodes;
+		meta["write"] = &NavGraphGenerator::write;
+	}
+
 	sol::table library = lua.create_table();
 	return library;
 }

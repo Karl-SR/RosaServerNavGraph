@@ -2,6 +2,7 @@ cmake_minimum_required (VERSION 3.8)
 
 add_library (rosaservernavgraph SHARED
 	rosaservernavgraph.cpp
+	navgraphgenerator.cpp
 )
 
 set_property (TARGET rosaservernavgraph PROPERTY CXX_STANDARD 17)
