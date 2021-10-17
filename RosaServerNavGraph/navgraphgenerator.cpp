@@ -246,4 +246,10 @@ void NavGraphGenerator::write(const std::string fileName) const {
 	}
 
 	file.close();
+
+	if (!file) {
+		std::ostringstream stream;
+		stream << "Failed to write to file: " << strerror(errno);
+		throw std::runtime_error(stream.str());
+	}
 }
