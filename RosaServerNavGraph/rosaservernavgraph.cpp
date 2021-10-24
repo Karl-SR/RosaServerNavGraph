@@ -6,6 +6,7 @@ static sol::table openLibrary(sol::this_state L) {
 
 	{
 		uintptr_t baseAddress = lua["memory"]["getBaseAddress"]();
+		lineIntersectPos = (Vector*)(baseAddress + 0x569ef720);
 		lineIntersectLevel = (lineIntersectLevelFunc)(baseAddress + 0x88cf0);
 	}
 

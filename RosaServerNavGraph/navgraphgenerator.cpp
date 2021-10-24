@@ -6,6 +6,7 @@
 #include <stack>
 #include <unordered_map>
 
+Vector* lineIntersectPos;
 lineIntersectLevelFunc lineIntersectLevel;
 
 bool Vector::isInCuboid(const Vector& lower, const Vector& upper) const {
@@ -15,10 +16,10 @@ bool Vector::isInCuboid(const Vector& lower, const Vector& upper) const {
 
 static const std::tuple<float, float> isTouchingGroundCheckpoints[] = {
     {0.f, 0.f},
-    {0.251f, 0.251f},
-    {0.251f, -0.251f},
-    {-0.251f, 0.251f},
-    {-0.251f, -0.251f}};
+    {0.249f, 0.249f},
+    {0.249f, -0.249f},
+    {-0.249f, 0.249f},
+    {-0.249f, -0.249f}};
 
 static constexpr const float sightSpan = 0.2f;
 
@@ -57,14 +58,26 @@ static inline bool doVoxelsHaveLineOfSight(Vector& posA, Vector posB) {
 
 bool NodePoint::isTouchingGround() const {
 	auto pos = toWorld();
+	float minY = std::numeric_limits<float>::infinity();
+	float maxY = -std::numeric_limits<float>::infinity();
+
 	for (const auto [x, z] : isTouchingGroundCheckpoints) {
 		Vector posA{pos.x + x, pos.y, pos.z + z};
 		Vector posB{posA.x, posA.y - 1.5f - 0.002f, posA.z};
 		if (!lineIntersectLevel(&posA, &posB, true)) {
 			return false;
 		}
+
+		if (lineIntersectPos->y < minY) {
+			minY = lineIntersectPos->y;
+		}
+		if (lineIntersectPos->y > maxY) {
+			maxY = lineIntersectPos->y;
+		}
 	}
-	return true;
+
+	// If the ground below isn't too steep
+	return maxY - minY < 0.333f;
 }
 
 bool NodePoint::isTouchingGroundWithLineOfSightFrom(Vector& otherPos,

@@ -4,12 +4,15 @@
 #include <tuple>
 #include <unordered_set>
 #include <vector>
+
 #include "sol/sol.hpp"
 
 struct Vector {
 	float x, y, z;
 	bool isInCuboid(const Vector& lower, const Vector& upper) const;
 };
+
+extern Vector* lineIntersectPos;
 
 struct NodePoint {
 	int x, y, z;
