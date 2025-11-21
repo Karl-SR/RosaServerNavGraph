@@ -1,0 +1,39 @@
+name: Build RosaServerNavGraph
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Install Tools
+        run: sudo apt-get update && sudo apt-get install -y cmake build-essential git
+
+      - name: Download Dependencies
+        run: |
+          rm -rf moonjit sol2
+          git clone https://github.com/moonjit/moonjit.git
+          git clone https://github.com/ThePhD/sol2.git
+
+      - name: Build MoonJIT
+        run: |
+          cd moonjit
+          make
+          cd ..
+
+      - name: Build Plugin
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          make
+
+      - name: Upload Result
+        uses: actions/upload-artifact@v4
+        with:
+          name: librosaservernavgraph
+          path: build/RosaServerNavGraph/librosaservernavgraph.so
